@@ -1,0 +1,9 @@
+
+{% load crispy_forms_tags %}
+
+<form method="get" class="form-inline">
+  {{ filter.form|crispy }}
+  <div class="container p-3">
+    <button type="submit" class="btn btn-primary">Filter</button>
+  </div>
+</form>

@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+
+{% block title %}Challenge list{% endblock %}
+
+{% block content %}
+  <div class="card mb-5">
+    <h1 class="card-body">
+      <a class="btn btn-primary float-end" href="{% url 'challenges:challenge-create' %}">Create new challenge</a>
+      Challenge list
+    </h1>
+  </div>
+
+  <div class="row">
+    {% include 'filter_form.html' with form=filter.form %}
+
+    <div class="card col-7 mb-5 mx-auto">
+      <ul class="list-group list-group-flush">
+        {% for challenge in challenges %}
+          <li class="list-group-item">
+            {% if challenge.id in approved_challenges %}
+              <p class="badge bg-success float-end"> approved </p>
+            {% elif challenge.id in not_approved_challenges %}
+              <p class="badge bg-danger float-end"> Not approved </p>
+            {% else %}
+              <a class="btn btn-secondary btn-sm float-end" href="{% url 'challenges:challenge-complete' %}?challenge={{challenge.id}}&next={{ request.path }}">
+                Complete
+              </a>
+            {% endif %}
+            <a class="nav-link" href="{% url 'challenges:challenge-detail' challenge.pk %}">{{ challenge.title }}</a>
+          </li>
+        {% empty %}
+          <h5 class="list-group-item">There no challenges yet...</h5>
+        {% endfor %}
+      </ul>
+
+      {% include "pagination.html" %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Event detail{% endblock %}
+
+{% block content %}
+  <div>
+    <div class="row mb-4">
+      <div class="card col-8 m-auto mt-5 border-0">
+        <h2 class="card-title text-center">
+          {{ event.title }}
+          (
+          {% if event.is_public %}
+            <span class="text-success"> PUBLIC </span>
+          {% else %}
+            <span class="text-danger"> PRIVATE </span>
+          {% endif %}
+          )
+        </h2>
+        <h5 class="card-title text-center">
+          Owner:
+          <a class="text-decoration-none" href="{% url 'users:detail' event.owner.username %}">
+            {{ event.owner.username }}
+          </a>
+        </h5>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <ul class="list-group">
+          <li class="list-group-item active">
+            <h5 class="font-weight-bold">Members</h5>
+          </li>
+        </ul>
+        <ul class="list-group">
+          {% for member in members %}
+            <a class="text-decoration-none" href="#">
+              <li class="list-group-item">{{ member.username }}</li>
+            </a>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col">
+        <ul class="list-group">
+          {% for challenge_group in challenge_groups %}
+            <a class="text-decoration-none" href="#">
+              <li class="list-group-item active">
+                <h5 class="font-weight-bold">{{ challenge_group.title }}</h5>
+              </li>
+            </a>
+            {% for challenge in challenge_group.challenges.all %}
+              <div>
+                <a class="text-decoration-none" href="{% url 'challenges:challenge-detail' challenge.id %}">{{ challenge.title }}</a>
+                {% if challenge.id in completed_challenges %}
+                  <p class="badge bg-success float-end"> approved </p>
+                {% elif challenge.id in not_approved_challenges %}
+                  <p class="badge bg-danger float-end"> Not approved </p>
+                {% else %}
+                  <a class="badge bg-secondary float-end"
+                     href="{% url 'challenges:challenge-complete' %}?event={{event.id}}&challenge={{challenge.id}}&next={{ request.path }}">
+                    Complete </a>
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col">
+        <ul class="list-group">
+          <li class="list-group-item active">
+            <h5 class="font-weight-bold">Moderators</h5>
+          </li>
+        </ul>
+        <ul class="list-group">
+          {% for moderator in moderators %}
+            <a class="text-decoration-none" href="{% url 'users:detail' moderator.username %}">
+              <li class="list-group-item">{{ moderator.username }}</li>
+            </a>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="d-flex justify-content-center">
+        <a class="btn btn-primary" href="{% url 'event-update' event.id %}">
+          <h5>Update</h5>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

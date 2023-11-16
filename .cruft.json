@@ -1,0 +1,17 @@
+{
+  "template": "git@github.com:saritasa-nest/saritasa-python-boilerplate-django.git",
+  "commit": "0cac40c830dbf0bf1a04652ea52d459bfd59cfde",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "Challenge World",
+      "jira_key": "PYCAMP",
+      "subdomain": "challenge-world",
+      "repo_name": "challenge-world-backend",
+      "repo_frontend_name": "challenge-world-frontend",
+      "python_version": "3.11",
+      "_template": "git@github.com:saritasa-nest/saritasa-python-boilerplate-django.git"
+    }
+  },
+  "directory": null
+}

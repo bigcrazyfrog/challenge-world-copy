@@ -1,0 +1,99 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+  <div class="card flex-row align-items-start mb-5">
+    <div class="col-2">
+      <div>
+        <img src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'img/avatar_default.jpg' %}{% endif %}" class="card-img-top">
+      </div>
+      <div class="card-body">
+        <a class="btn btn-primary w-100" href="{% url 'users:edit' %}">Edit</a>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-header">
+        <span class="badge text-secondary float-end">{% if profile.is_active %}Active{% else %}Deactive{% endif %}</span>
+        {{ profile.first_name }} {{ profile.last_name }}
+        <br><small class="text-secondary">{{ profile.username }}</small>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <small class="text-secondary">Email</small><br>
+          {{ profile.email }}
+        </li>
+        {% if debug or user.is_staff %}
+          <li class="list-group-item">
+            <small class="text-secondary">Created</small><br>
+            {{ profile.created }}
+          </li>
+          <li class="list-group-item">
+            <small class="text-secondary">Modified</small><br>
+            {{ profile.modified }}
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-5">
+    <div class="card-header">
+      Events
+    </div>
+    <div class="card-header text-secondary">
+      Passed events
+    </div>
+    {% include 'base_list.html' with items_list=profile.passed_events.distinct %}
+    <div class="card-header text-secondary">
+      Owned events
+    </div>
+    {% include 'base_list.html' with items_list=profile.owned_events.all %}
+    <div class="card-header text-secondary">
+      Moderated events
+    </div>
+    {% include 'base_list.html' with items_list=profile.moderated_events.all %}
+    <div class="card-header text-secondary">
+      Available events
+    </div>
+    {% include 'base_list.html' with items_list=profile.available_events.all %}
+  </div>
+
+  <div class="card mb-5">
+    <div class="card-header">
+      Achievements
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for achievement in profile.achievements.select_related %}
+        <li class="list-group-item">
+          {% if achievement.is_approved %}
+            <span class="badge bg-success float-end">Approved</span>
+          {% else %}
+            <span class="badge bg-danger float-end">Not approved</span>
+          {% endif %}
+          {{ achievement }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+
+  <div class="card mb-5">
+    <div class="card-header align-bottom d-flex align-items-center">
+      Favorite Groups
+      {% if profile == user %}
+        <a class="btn btn-primary btn-sm ms-auto" href="{% url 'groups:group-create' %}">Add new</a>
+      {% endif %}
+    </div>
+
+    <div class="list-group list-group-flush">
+      {% for group in profile.favorite_groups.all %}
+        <a class="list-group-item" href="{% url 'groups:group-detail' group.pk %}">
+          {{ group.title }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

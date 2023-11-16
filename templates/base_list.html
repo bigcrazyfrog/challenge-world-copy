@@ -1,0 +1,8 @@
+
+<ul class="list-group list-group-flush">
+  {% for item in items_list %}
+    <a class="list-group-item" href="{% url 'event-detail' item.id %}">
+      {{ item }}
+    </a>
+  {% endfor %}
+</ul>

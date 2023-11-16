@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Event list {% endblock %}
+
+{% block content %}
+  <div class="card mb-5">
+    <h1 class="card-body">
+      <a class="btn btn-primary float-end" href="{% url 'event-create' %}" class="btn btn-primary">Create new event</a>
+      Event list
+    </h1>
+  </div>
+  <div class="row">
+    {% include 'filter_form.html' with form=filter.form %}
+    <div class="card col-7 mb-5 mx-auto">
+      <div class="container-fluid">
+        {% for event in events %}
+          <div class="card mb-3">
+            <div class="card-body">
+              {% if event.is_active %}
+                <span class="badge bg-success float-end"> Active </span>
+              {% else %}
+                <span class="badge bg-danger float-end"> Close </span>
+              {% endif %}
+              {% if event.is_public %}
+                <span class="badge bg-success float-end"> Public </span>
+              {% else %}
+                <span class="badge bg-danger float-end"> Private </span>
+              {% endif %}
+              <h5 class="card-title">{{ event.title }}</h5>
+              <a href="{% url 'event-detail' event.id %}" class="btn btn-primary">View event</a>
+            </div>
+            <div class="card-footer">
+              Owner: <a href="{% url 'users:detail' event.owner.username %}" class="card-link">{{ event.owner.username }}</a>
+            </div>
+          </div>
+        {% empty %}
+          <p class="card-text">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">There no events yet...</h5>
+              </div>
+            </div>
+          </p>
+        {% endfor %}
+      </div>
+      <div>
+        {% include "pagination.html" %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

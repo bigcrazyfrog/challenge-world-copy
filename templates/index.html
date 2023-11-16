@@ -1,0 +1,28 @@
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <div class="bg-image"
+       style="background-image: url({% static 'img/background.jpg' %});
+              height: 80vh">
+    <div class="container py-5">
+      <h1 class="text-center"> Challenge world </h1>
+      <p class="text-center"> Create your own challenges, take part in events, get achievements! </p>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col text-center">
+          {% if user.is_authenticated %}
+            <a class="btn btn-primary" href="{% url 'challenges:challenge-list' %}" class="btn btn-primary"> Show challenges </a>
+          {% else %}
+            <a class="btn btn-primary" href="{% url 'signup' %}" class="btn btn-primary"> Get started </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

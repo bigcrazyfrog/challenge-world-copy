@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Challenge detail{% endblock %}
+
+{% block content %}
+  <div>
+    <div class="row mb-4">
+      <div class="card col-8 m-auto mt-5 border-0">
+        <h2 class="card-title text-center"> {{ object.title }} </h2>
+        <div>
+          {% if object.is_conveyable %}
+            <span class="badge bg-success float-end"> Conveyable </span>
+          {% else %}
+            <span class="badge bg-danger float-end"> Not conveyable </span>
+          {% endif %}
+        </div>
+        <div style="height: 30px;">
+          <span><b> Description: </b></span>
+        </div>
+        <div class="card flex-row align-items-start mb-5">
+          <div class="card-header text-center">
+            {{ object.description }}
+          </div>
+        </div>
+        <div class="card flex-row align-items-start mb-5">
+          <div class="card-header">
+            Author: <a href="{% url 'users:detail' object.author.username %}" class="btn btn-primary"> {{ object.author.username }} </a>
+          </div>
+        </div>
+        <div>
+          <div class="card-header"> Tags:
+            {% for tag in object.tags.all %}
+              <span class="badge bg-success float-end">{{ tag.name }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <a href="{% url 'challenges:challenge-complete' %}?challenge={{object.id}}&next={{ request.path }}" class="btn btn-secondary opacity-75 mt-5">Complete</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
